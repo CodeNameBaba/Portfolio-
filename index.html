@@ -341,4 +341,373 @@ footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
     nav ul {
         position: fixed; top: 0; right: -100%; width: 100vw; height: 100vh;
         background: rgba(3,4,5,0.98); backdrop-filter: blur(20px);
-        flex-direction: column; justify-content: 
+        flex-direction: column; justify-content: center; align-items: center;
+        transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 1001; gap: 20px;
+    }
+    nav ul.active { right: 0; }
+    nav ul li a { font-size: 22px; border: none; padding: 15px; }
+    nav ul li a::after { display: none; }
+    
+    .operator-card { flex-direction: column; align-items: center; text-align: center; }
+    .data-item { flex-direction: column; gap: 5px; }
+}
+@keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--volt); } 50% { opacity: 0.3; box-shadow: none; } }
+</style>
+</head>
+<body>
+
+    <canvas id="radar-canvas"></canvas>
+
+    <div class="global-hud">
+        <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+        <div class="telemetry tel-top-left">
+            <div>SYS_OS: V.3.0.1</div>
+            <div>MEM_ALLOC: <span class="live-data" id="mem-data">0x8F2A</span></div>
+        </div>
+        <div class="telemetry tel-bottom-right">
+            <div>TARGET_X: <span class="live-data" id="coord-x">000</span></div>
+            <div>TARGET_Y: <span class="live-data" id="coord-y">000</span></div>
+        </div>
+    </div>
+
+    <div id="reticle-dot"></div><div id="reticle-cross"></div>
+
+    <div id="boot-sys">
+        <button class="init-btn tgt" id="btn-init">INITIALIZE UPLINK</button>
+        <div class="terminal-container" id="terminal">
+            <div class="term-line">> ESTABLISHING SECURE CONNECTION TO SATELLITE NETWORK...</div>
+            <div class="term-line">> BYPASSING FIREWALL PROTOCOLS... OK</div>
+            <div class="term-line">> DECRYPTING OPERATOR BIOMETRICS: SHAHWAR_KHAN</div>
+            <div class="term-progress"><div class="term-fill" id="boot-fill"></div></div>
+            <div class="term-line" id="final-line">> ACCESS GRANTED. WELCOME TO THE GRID.</div>
+        </div>
+    </div>
+
+    <nav class="hud-nav">
+        <div class="nav-brand">SHAHWAR</div>
+        <ul id="nav-list">
+            <li><a href="#hero" class="tgt">PROFILE</a></li>
+            <li><a href="#intel" class="tgt">BARRACKS</a></li>
+            <li><a href="#loadout" class="tgt">LOADOUT</a></li>
+            <li><a href="#comms" class="tgt">COMMS</a></li>
+            <li><a href="https://underarc-studios.zya.me/" target="_blank" class="tgt">FACTION</a></li>
+        </ul>
+        <div class="mob-menu tgt" id="mobToggle"><span></span><span></span><span></span></div>
+    </nav>
+
+    <section id="hero" class="container">
+        <div class="hero-wrapper" id="hero-tilt">
+            <div class="class-tag"><span>CLASS:</span> FULL-STACK OPERATOR</div>
+            <h1 class="hero-title">SHAHWAR<br><span>KHAN</span></h1>
+            <p class="hero-desc">Software Developer & Programmer // Operating out of Chhapara, Seoni. Executing high-fidelity code, deploying modern applications, and engineering scalable system architectures.</p>
+        </div>
+    </section>
+
+    <section id="intel" class="container">
+        <h2 class="section-title"><span>01</span> OPERATOR INTEL</h2>
+        <div class="intel-container">
+            <div class="intel-nav">
+                <div class="intel-tab active tgt" data-target="tab-1">OVERVIEW</div>
+                <div class="intel-tab tgt" data-target="tab-2">COMBAT RECORD</div>
+                <div class="intel-tab tgt" data-target="tab-3">MISSION LOGS</div>
+                <div class="intel-tab tgt" data-target="tab-4">TRAINING FACILITY</div>
+            </div>
+            <div class="intel-screen">
+                <div class="screen-data active" id="tab-1">
+                    <div class="operator-card">
+                        <img src="images/User.jpg" alt="Shahwar" class="operator-img tgt">
+                        <div class="operator-info">
+                            <h3>SHAHWAR <span>"BABA"</span> KHAN</h3>
+                            <div class="serial">ID: SH-K-91310 // CLASSIFIED</div>
+                            <p>I am a man in pursuit of knowledge and wisdom, exploring every corner of science and technology to understand the universe and the logic behind creation.</p>
+                        </div>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item"><div class="data-lbl">CURRENT ASSIGNMENT</div><div class="data-val">B.Tech Computer Science // Hyderabad Division</div></div>
+                        <div class="data-item"><div class="data-lbl">SPECIALIZATION</div><div class="data-val">Full-Stack Web Development, Android Architecture</div></div>
+                    </div>
+                </div>
+                <div class="screen-data" id="tab-2">
+                    <div class="data-grid">
+                        <div class="data-item"><div class="data-lbl">UI/UX INTERFACE DESIGN</div><div class="data-val">Engineering high-fidelity tactical web and app interfaces for optimal user experience.</div></div>
+                        <div class="data-item"><div class="data-lbl">WEB OPERATIONS</div><div class="data-val">Full deployment and management of dynamic web applications.</div></div>
+                        <div class="data-item"><div class="data-lbl">MOBILE DEPLOYMENT</div><div class="data-val">Building native Android applications utilizing Java and XML protocols within Android Studio.</div></div>
+                    </div>
+                </div>
+                <div class="screen-data" id="tab-3">
+                    <div class="data-grid">
+                        <div class="data-item"><div class="data-lbl">2020: INITIALIZATION</div><div class="data-val">Assembled primary rig. Initiated Python and Java command structures.</div></div>
+                        <div class="data-item"><div class="data-lbl">2021: VISUAL PROTOCOLS</div><div class="data-val">Mastered HTML, CSS, JavaScript infrastructures.</div></div>
+                        <div class="data-item"><div class="data-lbl">2023: MOBILE WARFARE</div><div class="data-val">Shifted operation to Android Studio. Deployed first functional application.</div></div>
+                        <div class="data-item"><div class="data-lbl">2025: FORWARD BASE</div><div class="data-val">Relocated to Hyderabad. Commenced advanced training in Computer Science.</div></div>
+                    </div>
+                </div>
+                <div class="screen-data" id="tab-4">
+                    <div class="data-grid">
+                        <div class="data-item"><div class="data-lbl">SECONDARY EDUCATION</div><div class="data-val">Completed 12th Standard Protocol at Mission Higher Sec., Chhapara.</div></div>
+                        <div class="data-item"><div class="data-lbl">TACTICAL GAP YEAR</div><div class="data-val">Stationed in Raipur for specialized JEE focus and conditioning.</div></div>
+                        <div class="data-item"><div class="data-lbl">TGEAPCET CLEARANCE</div><div class="data-val">Passed regional examination. Embedded in B.Tech Computer Science program.</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="loadout" class="container">
+        <h2 class="section-title"><span>02</span> SYSTEM LOADOUT</h2>
+        <div class="loadout-grid">
+            <div class="skill-row tgt" data-val="80"><div class="skill-id"><img src="images/html.png"><span>HTML 5</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">80</div></div></div>
+            <div class="skill-row tgt" data-val="55"><div class="skill-id"><img src="images/css.png"><span>CSS 3</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">55</div></div></div>
+            <div class="skill-row tgt" data-val="80"><div class="skill-id"><img src="images/js (1).png"><span>JavaScript</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">80</div></div></div>
+            <div class="skill-row tgt" data-val="75"><div class="skill-id"><img src="images/java.png"><span>Java Core</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">75</div></div></div>
+            <div class="skill-row tgt" data-val="50"><div class="skill-id"><img src="images/c++.png"><span>C++</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">50</div></div></div>
+            <div class="skill-row tgt" data-val="55"><div class="skill-id"><img src="images/xml.png"><span>XML</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">55</div></div></div>
+            <div class="skill-row tgt" data-val="10"><div class="skill-id"><img src="images/python.png"><span>Python</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">10</div></div></div>
+            <div class="skill-row tgt" data-val="15"><div class="skill-id"><img src="images/php.png"><span>PHP</span></div><div class="skill-meter"><div class="meter-core"></div><div class="skill-num">15</div></div></div>
+        </div>
+    </section>
+
+    <section id="comms" class="container">
+        <h2 class="section-title"><span>03</span> SECURE UPLINK</h2>
+        <div class="comms-ui">
+            <div class="comms-sidebar">
+                <p>Establishing encrypted P2P connection... Standing by for transmission payload. All channels actively monitored.</p>
+                <a href="mailto:official.shahwark@gmail.com" class="channel tgt"><i class="fas fa-envelope"></i> OFFICIAL.SHAHWARK@GMAIL.COM</a>
+                <a href="tel:+919131062919" class="channel tgt"><i class="fas fa-satellite-dish"></i> +91 91310-62919</a>
+                <div class="soc-grid">
+                    <a href="https://www.instagram.com/md.shahwarkhan/" class="soc-box tgt" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://github.com/CodeNameBaba" class="soc-box tgt" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://wa.me/9131062919" class="soc-box tgt" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="tel:+919131062919" class="soc-box tgt"><i class="fas fa-phone-alt"></i></a>
+                </div>
+            </div>
+            <div class="comms-form">
+                <form name="submit-to-google-sheet">
+                    <div class="input-block"><label>OPERATOR CALLSIGN</label><input class="form-cmd tgt" name="Name" type="text" required></div>
+                    <div class="input-block"><label>ENCRYPTED RETURN ADDRESS</label><input class="form-cmd tgt" name="email" type="email" required></div>
+                    <div class="input-block"><label>DATA PAYLOAD</label><textarea class="form-cmd tgt" name="Message" required></textarea></div>
+                    <button class="transmit-btn tgt" type="submit">TRANSMIT DATA <i class="fas fa-broadcast-tower"></i></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>SYS_ENGINE_V.4.0.0 // ENGINERED BY <a href="https://underarc-studios.zya.me/" target="_blank" class="tgt">UNDERARC STUDIOS</a></p>
+    </footer>
+
+<script>
+/* =========================================
+   SYNTHETIC AUDIO ENGINE (WEB AUDIO API)
+   The Ultimate Flex: Procedural UI Sounds
+   ========================================= */
+const AudioEngine = {
+    ctx: null,
+    init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+    playTone(freq, type, duration, vol) {
+        if(!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + duration);
+    },
+    hover() { this.playTone(800, 'sine', 0.05, 0.05); },
+    click() { this.playTone(400, 'square', 0.1, 0.05); setTimeout(()=>this.playTone(600, 'square', 0.15, 0.05), 50); },
+    boot() { this.playTone(150, 'sawtooth', 1.5, 0.1); }
+};
+
+/* =========================================
+   BIOMETRIC BOOT SEQUENCE
+   ========================================= */
+const btnInit = document.getElementById('btn-init');
+const terminal = document.getElementById('terminal');
+const lines = document.querySelectorAll('.term-line');
+const progress = document.querySelector('.term-progress');
+const fill = document.getElementById('boot-fill');
+const bootSys = document.getElementById('boot-sys');
+
+btnInit.addEventListener('click', () => {
+    AudioEngine.init(); // Initialize audio context on first user gesture
+    AudioEngine.click();
+    AudioEngine.boot();
+    btnInit.style.display = 'none';
+    terminal.style.display = 'block';
+    
+    setTimeout(() => lines[0].style.opacity = '1', 300);
+    setTimeout(() => lines[1].style.opacity = '1', 800);
+    setTimeout(() => lines[2].style.opacity = '1', 1200);
+    setTimeout(() => {
+        progress.style.display = 'block';
+        fill.style.width = '100%';
+        fill.style.transition = 'width 1.5s ease-in-out';
+    }, 1500);
+    setTimeout(() => lines[3].style.opacity = '1', 3200);
+    setTimeout(() => {
+        bootSys.style.opacity = '0';
+        setTimeout(() => bootSys.remove(), 500);
+    }, 4000);
+});
+
+/* =========================================
+   INTERACTIVE HUD & TELEMETRY
+   ========================================= */
+const coordX = document.getElementById('coord-x');
+const coordY = document.getElementById('coord-y');
+const memData = document.getElementById('mem-data');
+const dot = document.getElementById('reticle-dot');
+const cross = document.getElementById('reticle-cross');
+
+window.addEventListener('mousemove', (e) => {
+    // Update Reticle
+    dot.style.left = `${e.clientX}px`; dot.style.top = `${e.clientY}px`;
+    cross.style.left = `${e.clientX}px`; cross.style.top = `${e.clientY}px`;
+    // Update Telemetry
+    coordX.innerText = e.clientX.toString().padStart(4, '0');
+    coordY.innerText = e.clientY.toString().padStart(4, '0');
+});
+
+// Random Memory Hex updater
+setInterval(() => {
+    memData.innerText = '0x' + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(4, '0');
+}, 500);
+
+// Attach Audio & Hover states to all interactive elements
+document.querySelectorAll('.tgt').forEach(t => {
+    t.addEventListener('mouseenter', () => { document.body.classList.add('target-locked'); AudioEngine.hover(); });
+    t.addEventListener('mouseleave', () => document.body.classList.remove('target-locked'));
+    t.addEventListener('click', () => AudioEngine.click());
+});
+
+/* =========================================
+   TACTICAL RADAR CANVAS
+   ========================================= */
+const canvas = document.getElementById('radar-canvas');
+const ctx = canvas.getContext('2d');
+let cw = canvas.width = window.innerWidth;
+let ch = canvas.height = window.innerHeight;
+let scanLineY = 0;
+
+function drawRadar() {
+    ctx.clearRect(0, 0, cw, ch);
+    // Draw Grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(let x = 0; x < cw; x += 50) { ctx.moveTo(x, 0); ctx.lineTo(x, ch); }
+    for(let y = 0; y < ch; y += 50) { ctx.moveTo(0, y); ctx.lineTo(cw, y); }
+    ctx.stroke();
+    
+    // Draw Scanline
+    scanLineY += 2;
+    if(scanLineY > ch) scanLineY = 0;
+    
+    let gradient = ctx.createLinearGradient(0, scanLineY - 100, 0, scanLineY);
+    gradient.addColorStop(0, 'transparent');
+    gradient.addColorStop(1, 'rgba(204, 255, 0, 0.2)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, scanLineY - 100, cw, 100);
+    ctx.strokeStyle = 'rgba(204, 255, 0, 0.8)';
+    ctx.beginPath();
+    ctx.moveTo(0, scanLineY); ctx.lineTo(cw, scanLineY);
+    ctx.stroke();
+    
+    requestAnimationFrame(drawRadar);
+}
+drawRadar();
+window.addEventListener('resize', () => { cw = canvas.width = window.innerWidth; ch = canvas.height = window.innerHeight; });
+
+/* =========================================
+   UI LOGIC (Tabs, Nav, Parallax)
+   ========================================= */
+// 3D Parallax Hero
+const hero = document.getElementById('hero');
+const tilt = document.getElementById('hero-tilt');
+hero.addEventListener('mousemove', (e) => {
+    if(window.innerWidth < 768) return;
+    let xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+    let yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+    tilt.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+});
+hero.addEventListener('mouseleave', () => tilt.style.transform = `rotateY(0deg) rotateX(0deg)`);
+
+// Intel Tabs
+document.querySelectorAll('.intel-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.intel-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.screen-data').forEach(c => { c.classList.remove('active'); void c.offsetWidth; }); // Force reflow
+        this.classList.add('active');
+        document.getElementById(this.getAttribute('data-target')).classList.add('active');
+    });
+});
+
+// Mobile Nav
+const mobToggle = document.getElementById('mobToggle');
+const navList = document.getElementById('nav-list');
+mobToggle.addEventListener('click', () => {
+    mobToggle.classList.toggle('open');
+    navList.classList.toggle('active');
+});
+
+// Smooth Scroll Nav
+document.querySelectorAll('nav ul li a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        if(this.getAttribute('href').startsWith('#')) {
+            e.preventDefault();
+            document.querySelectorAll('nav ul li a').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            if(window.innerWidth <= 768) { mobToggle.classList.remove('open'); navList.classList.remove('active'); }
+            const target = document.querySelector(this.getAttribute('href'));
+            window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        }
+    });
+});
+
+// Build Loadout Meters
+document.querySelectorAll('.skill-row').forEach(row => {
+    const val = parseInt(row.getAttribute('data-val'));
+    const segments = 15; 
+    const filled = Math.round((val / 100) * segments);
+    const container = row.querySelector('.meter-core');
+    for(let i=0; i<segments; i++) {
+        let seg = document.createElement('div');
+        seg.classList.add('meter-seg');
+        if(i < filled) seg.classList.add('on');
+        container.appendChild(seg);
+    }
+});
+
+/* =========================================
+   FORM SUBMISSION
+   ========================================= */
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzYPdPYJsuLCf2O4HG2Qi06ILSiJC-NPvSCFW2cDE1bSGvwQ0PJvggJEbgBba12y3JF6A/exec';
+const form = document.forms['submit-to-google-sheet'];
+
+form.addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = form.querySelector('button');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> TRANSMITTING...';
+    btn.style.background = 'var(--volt)'; btn.style.color = '#000';
+    btn.disabled = true;
+    
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+    .then(res => {
+        alert('PAYLOAD DELIVERED SUCCESSFULLY.');
+        form.reset();
+    })
+    .catch(err => alert('CONNECTION FAILED. RETRY UPLINK.'))
+    .finally(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = 'transparent'; btn.style.color = 'var(--text-main)';
+        btn.disabled = false;
+    });
+});
+</script>
+</body>
+</html>
