@@ -4,589 +4,341 @@
     <meta name="google-site-verification" content="2D-aimG1JDEKGYjOwUbJNHUjYs2CbXiro4AgUwCqj-w" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="I am Shahwar Khan aka baba from Chhapara district Seoni I am a software developer and Programmer.">
-    <title>Shahwar "Baba" Khan | System Settings</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Shahwar Khan - Tier 1 Operator & Developer.">
+    <title>SHAHWAR // TIER-1 UPLINK</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
+/* =========================================
+   ENGINE VARIABLES & RESET
+   ========================================= */
 :root {
-    --mw-accent: #c4ff00; /* Signature MW Toxic Green */
-    --mw-bg-base: #0a0a0c;
-    --mw-panel: rgba(18, 18, 20, 0.7);
-    --mw-panel-hover: rgba(255, 255, 255, 0.05);
-    --mw-border: rgba(255, 255, 255, 0.1);
-    --mw-border-strong: rgba(255, 255, 255, 0.2);
-    --mw-text: #f0f0f0;
-    --mw-text-muted: #8e8e93;
-    --mw-track: rgba(255, 255, 255, 0.1);
-    --nav-height: 70px;
+    --volt: #ccff00; /* MW2 Signature Green */
+    --volt-glow: rgba(204, 255, 0, 0.4);
+    --bg-base: #030405;
+    --panel-dark: rgba(8, 10, 12, 0.75);
+    --panel-light: rgba(20, 24, 28, 0.9);
+    --border-dim: rgba(255, 255, 255, 0.08);
+    --border-bright: rgba(255, 255, 255, 0.25);
+    --text-main: #e2e4e9;
+    --text-muted: #646b7a;
+    --danger: #ff2a2a;
+    --nav-h: 80px;
+    --hud-margin: 20px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+html { scroll-behavior: smooth; background: #000; }
 body {
-    background-color: var(--mw-bg-base);
-    color: var(--mw-text);
-    overflow-x: hidden;
-    background-image: 
-        linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.85)),
-        url(' background.png');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+    background-color: var(--bg-base); color: var(--text-main);
+    font-family: 'Chakra Petch', sans-serif; overflow-x: hidden; user-select: none;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
+::-webkit-scrollbar { width: 4px; background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); }
+::-webkit-scrollbar-thumb:hover { background: var(--volt); }
+::selection { background: var(--volt); color: #000; }
+
+/* =========================================
+   HUD OVERLAY & TELEMETRY
+   ========================================= */
+#radar-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+body::after {
+    content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+    pointer-events: none; z-index: 9997; box-shadow: inset 0 0 150px rgba(0,0,0,0.95);
 }
 
-html { scroll-behavior: smooth; }
-
-.container {
-    padding: 0 5%;
-    max-width: 1600px;
-    margin: auto;
+.global-hud {
+    position: fixed; top: var(--hud-margin); left: var(--hud-margin); right: var(--hud-margin); bottom: var(--hud-margin);
+    pointer-events: none; z-index: 9996; border: 1px solid rgba(255,255,255,0.03);
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
 }
+.hud-corner { position: absolute; width: 30px; height: 30px; border: 2px solid var(--volt); opacity: 0.5; transition: 0.2s; }
+.hud-tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.hud-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+.hud-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+.hud-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+.telemetry { position: absolute; font-family: 'Share Tech Mono'; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; }
+.tel-top-left { top: 10px; left: 40px; }
+.tel-bottom-right { bottom: 10px; right: 40px; text-align: right; }
+.live-data { color: var(--volt); }
+
+/* =========================================
+   CUSTOM RETICLE (CURSOR)
+   ========================================= */
+#reticle-dot {
+    position: fixed; width: 2px; height: 2px; background: var(--volt);
+    transform: translate(-50%, -50%); pointer-events: none; z-index: 10000; box-shadow: 0 0 8px var(--volt);
+}
+#reticle-cross {
+    position: fixed; width: 40px; height: 40px; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: 9999; transition: width 0.1s, height 0.1s, transform 0.1s;
+}
+#reticle-cross::before, #reticle-cross::after { content: ''; position: absolute; background: rgba(204, 255, 0, 0.4); }
+#reticle-cross::before { top: 50%; left: 0; width: 100%; height: 1px; transform: translateY(-50%); }
+#reticle-cross::after { left: 50%; top: 0; height: 100%; width: 1px; transform: translateX(-50%); }
+
+body.target-locked #reticle-cross { width: 25px; height: 25px; transform: translate(-50%, -50%) rotate(45deg); }
+body.target-locked #reticle-cross::before, body.target-locked #reticle-cross::after { background: var(--volt); box-shadow: 0 0 5px var(--volt); }
+
+/* =========================================
+   BIOMETRIC BOOT SEQUENCE
+   ========================================= */
+#boot-sys {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000;
+    z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    font-family: 'Share Tech Mono'; color: var(--volt); transition: opacity 0.5s ease;
+}
+.init-btn {
+    padding: 15px 40px; border: 1px solid var(--volt); background: rgba(204,255,0,0.05);
+    color: var(--volt); font-family: 'Rajdhani'; font-size: 24px; font-weight: 700; letter-spacing: 4px;
+    cursor: none; text-transform: uppercase; transition: 0.3s;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.init-btn:hover { background: var(--volt); color: #000; box-shadow: 0 0 20px var(--volt-glow); }
+
+.terminal-container { display: none; width: 80%; max-width: 800px; text-align: left; }
+.term-line { font-size: 14px; margin-bottom: 5px; opacity: 0; }
+.term-progress { width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin: 20px 0; position: relative; display: none; }
+.term-fill { height: 100%; width: 0%; background: var(--volt); box-shadow: 0 0 10px var(--volt); }
+
+/* =========================================
+   UI STRUCTURE
+   ========================================= */
+.container { padding: 0 8%; max-width: 1920px; margin: auto; position: relative; z-index: 10; }
 
 .section-title {
-    font-family: 'Teko', sans-serif;
-    font-size: 2.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--mw-text);
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--mw-border-strong);
-    padding-bottom: 10px;
-    display: flex;
-    align-items: center;
+    font-family: 'Rajdhani'; font-size: 4rem; font-weight: 700; letter-spacing: 5px; color: var(--text-main);
+    margin-bottom: 60px; display: flex; align-items: flex-end; gap: 20px; text-transform: uppercase;
 }
-.section-title::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 30px;
-    background: var(--mw-accent);
-    margin-right: 15px;
+.section-title span { font-family: 'Share Tech Mono'; font-size: 1.5rem; color: var(--volt); padding-bottom: 10px; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-bright), transparent); margin-bottom: 15px; }
+
+/* =========================================
+   HUD NAVIGATION
+   ========================================= */
+.hud-nav {
+    position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 6%;
+    z-index: 1000; background: linear-gradient(to bottom, rgba(3,4,5,0.95), transparent);
+    border-bottom: 1px solid var(--border-dim);
 }
+.nav-brand { font-family: 'Rajdhani'; font-size: 28px; font-weight: 700; letter-spacing: 4px; color: var(--text-main); display: flex; align-items: center; gap: 15px; }
+.nav-brand::before { content: ''; width: 8px; height: 8px; background: var(--volt); animation: pulse 2s infinite; }
 
-/* --- Top Navigation --- */
-.glass-nav {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: var(--nav-height);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5%;
-    z-index: 1000;
-    background: rgba(10, 10, 12, 0.6);
-    backdrop-filter: blur(15px);
-    border-bottom: 1px solid var(--mw-border);
-}
-
-.logo { width: 140px; filter: grayscale(100%) brightness(200%); }
-
-nav ul {
-    display: flex;
-    height: 100%;
-}
-
-nav ul li {
-    list-style: none;
-    height: 100%;
-}
-
+nav ul { display: flex; height: 100%; gap: 2px; }
+nav ul li { list-style: none; height: 100%; display: flex; align-items: center; }
 nav ul li a {
-    color: var(--mw-text-muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 25px;
-    position: relative;
-    transition: color 0.2s ease;
+    color: var(--text-muted); text-decoration: none; font-family: 'Share Tech Mono';
+    font-size: 13px; letter-spacing: 3px; padding: 10px 25px; transition: 0.2s;
+    border: 1px solid transparent; position: relative; overflow: hidden;
 }
-
 nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 0; width: 100%; height: 3px;
-    background: var(--mw-accent);
-    transform: scaleX(0);
-    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+    background: var(--volt); transform: scaleX(0); transition: 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+nav ul li a:hover, nav ul li a.active { color: var(--text-main); background: rgba(204,255,0,0.03); border-color: var(--border-dim); }
+nav ul li a:hover::after, nav ul li a.active::after { transform: scaleX(1); box-shadow: 0 0 10px var(--volt-glow); }
+
+/* =========================================
+   HERO / PARALLAX
+   ========================================= */
+#hero { width: 100%; height: 100vh; display: flex; align-items: center; perspective: 1000px; padding-top: var(--nav-h); }
+.hero-wrapper { transform-style: preserve-3d; transition: transform 0.1s; max-width: 1000px; }
+
+.class-tag {
+    display: inline-flex; align-items: center; gap: 15px; border: 1px solid var(--border-dim);
+    color: var(--text-muted); font-family: 'Share Tech Mono'; font-size: 12px;
+    padding: 6px 15px; letter-spacing: 4px; margin-bottom: 30px;
+    background: rgba(0,0,0,0.6); transform: translateZ(20px);
+}
+.class-tag span { color: var(--volt); }
+
+.hero-title {
+    font-size: 9rem; line-height: 0.85; font-weight: 700; color: var(--text-main);
+    transform: translateZ(50px); text-transform: uppercase; font-family: 'Rajdhani';
+    text-shadow: 10px 10px 0 rgba(0,0,0,0.8); position: relative;
+}
+.hero-title span { color: transparent; -webkit-text-stroke: 2px var(--volt); }
+
+.hero-desc {
+    font-size: 1.1rem; color: var(--text-muted); margin-top: 35px; max-width: 650px;
+    line-height: 1.6; border-left: 2px solid var(--volt); padding-left: 25px;
+    transform: translateZ(30px); font-family: 'Share Tech Mono'; background: rgba(0,0,0,0.4); padding-top: 10px; padding-bottom: 10px;
 }
 
-nav ul li a:hover, nav ul li a.active {
-    color: var(--mw-text);
-    background: linear-gradient(to top, rgba(196, 255, 0, 0.1), transparent 50%);
+/* =========================================
+   BARRACKS (INTEL UI)
+   ========================================= */
+#intel { padding: 120px 0; }
+.intel-container {
+    display: flex; background: var(--panel-dark); border: 1px solid var(--border-dim);
+    backdrop-filter: blur(25px); min-height: 500px; position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%);
+}
+.intel-container::after { content: ''; position: absolute; bottom: 0; right: 0; width: 40px; height: 2px; background: var(--volt); }
+
+.intel-nav { flex: 0 0 350px; border-right: 1px solid var(--border-dim); display: flex; flex-direction: column; background: rgba(0,0,0,0.4); }
+.intel-tab {
+    padding: 25px 30px; font-family: 'Share Tech Mono'; font-size: 14px; color: var(--text-muted);
+    border-bottom: 1px solid var(--border-dim); border-left: 2px solid transparent; transition: 0.2s;
+    display: flex; justify-content: space-between; align-items: center; letter-spacing: 2px;
+}
+.intel-tab::before { content: '>'; opacity: 0; transition: 0.2s; color: var(--volt); }
+.intel-tab:hover { background: rgba(255,255,255,0.02); color: var(--text-main); }
+.intel-tab.active { background: rgba(204,255,0,0.05); color: var(--text-main); border-left-color: var(--volt); }
+.intel-tab.active::before { opacity: 1; }
+
+.intel-screen { flex: 1; padding: 50px; position: relative; overflow: hidden; }
+.screen-data { display: none; animation: dataStream 0.3s ease-out; }
+.screen-data.active { display: block; }
+@keyframes dataStream { 0% { opacity: 0; transform: translateX(20px); filter: blur(5px); } 100% { opacity: 1; transform: translateX(0); filter: blur(0); } }
+
+/* Profile Card */
+.operator-card { display: flex; gap: 40px; margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 40px; }
+.operator-img { 
+    width: 150px; height: 150px; object-fit: cover; border: 1px solid var(--border-dim);
+    padding: 5px; background: #000; filter: grayscale(100%); transition: 0.3s;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+}
+.operator-card:hover .operator-img { filter: grayscale(0%); border-color: var(--volt); box-shadow: 0 0 15px var(--volt-glow); }
+.operator-info h3 { font-family: 'Rajdhani'; font-size: 3.5rem; line-height: 0.9; margin-bottom: 5px; text-transform: uppercase; }
+.operator-info h3 span { color: var(--volt); }
+.operator-info .serial { font-family: 'Share Tech Mono'; color: var(--text-muted); font-size: 12px; letter-spacing: 3px; }
+.operator-info p { margin-top: 15px; color: var(--text-muted); line-height: 1.6; max-width: 500px; }
+
+.data-grid { display: grid; gap: 20px; }
+.data-item { display: flex; border-bottom: 1px dotted rgba(255,255,255,0.1); padding-bottom: 10px; }
+.data-lbl { flex: 0 0 200px; font-family: 'Share Tech Mono'; color: var(--text-muted); font-size: 12px; letter-spacing: 2px; }
+.data-val { flex: 1; color: var(--text-main); font-weight: 500; font-size: 14px; }
+
+/* =========================================
+   LOADOUT (DATA BARS)
+   ========================================= */
+#loadout { padding: 120px 0; }
+.loadout-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0 80px;
+    background: var(--panel-dark); padding: 50px; border: 1px solid var(--border-dim);
+    backdrop-filter: blur(20px); clip-path: polygon(0 30px, 30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+}
+.skill-row { display: flex; align-items: center; justify-content: space-between; padding: 25px 0; border-bottom: 1px solid var(--border-dim); position: relative; }
+.skill-row::before { content: ''; position: absolute; left: -20px; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: var(--volt); transition: 0.2s; }
+.skill-row:hover::before { height: 70%; }
+
+.skill-id { display: flex; align-items: center; gap: 20px; width: 35%; }
+.skill-id img { width: 26px; filter: grayscale(100%) opacity(0.6); transition: 0.3s; }
+.skill-row:hover .skill-id img { filter: grayscale(0%) opacity(1) drop-shadow(0 0 5px var(--volt)); }
+.skill-id span { font-family: 'Rajdhani'; font-size: 18px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; transition: 0.2s; }
+.skill-row:hover .skill-id span { color: var(--text-main); }
+
+.skill-meter { width: 60%; display: flex; align-items: center; gap: 15px; }
+.meter-core { display: flex; gap: 3px; flex: 1; }
+.meter-seg { height: 16px; flex: 1; background: rgba(255,255,255,0.04); transform: skewX(-25deg); transition: 0.1s; }
+.meter-seg.on { background: var(--text-muted); }
+.skill-row:hover .meter-seg.on { background: var(--volt); box-shadow: 0 0 8px var(--volt-glow); }
+.skill-num { font-family: 'Share Tech Mono'; font-size: 14px; color: var(--text-muted); width: 40px; text-align: right; }
+.skill-row:hover .skill-num { color: var(--volt); }
+
+/* =========================================
+   COMMS (CONTACT FORM)
+   ========================================= */
+#comms { padding: 120px 0 150px; }
+.comms-ui {
+    display: flex; background: var(--panel-dark); border: 1px solid var(--border-dim);
+    backdrop-filter: blur(25px); position: relative;
+}
+.comms-ui::before, .comms-ui::after { content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--border-bright); pointer-events: none; }
+.comms-ui::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.comms-ui::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.comms-sidebar { flex: 0 0 40%; padding: 60px; background: rgba(0,0,0,0.6); border-right: 1px solid var(--border-dim); }
+.comms-sidebar p { font-family: 'Share Tech Mono'; color: var(--text-muted); font-size: 13px; margin-bottom: 50px; line-height: 1.6; }
+
+.channel {
+    display: flex; align-items: center; gap: 20px; color: var(--text-main); text-decoration: none;
+    font-family: 'Rajdhani'; font-size: 18px; font-weight: 600; letter-spacing: 2px;
+    margin-bottom: 25px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid transparent; transition: 0.2s;
+}
+.channel i { color: var(--text-muted); font-size: 20px; transition: 0.2s; }
+.channel:hover { border-color: var(--border-dim); background: rgba(204,255,0,0.05); color: var(--volt); transform: translateX(10px); }
+.channel:hover i { color: var(--volt); }
+
+.soc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 60px; }
+.soc-box {
+    display: flex; align-items: center; justify-content: center; height: 60px;
+    border: 1px solid var(--border-dim); color: var(--text-muted); font-size: 24px;
+    text-decoration: none; transition: 0.2s; background: rgba(0,0,0,0.4);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.soc-box:hover { background: var(--volt); color: #000; border-color: var(--volt); box-shadow: 0 0 15px var(--volt-glow); }
+
+.comms-form { flex: 1; padding: 60px; }
+.input-block { margin-bottom: 35px; }
+.input-block label { display: block; font-family: 'Share Tech Mono'; font-size: 12px; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 2px; }
+.form-cmd {
+    width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-dim); border-bottom: 2px solid var(--text-muted);
+    color: var(--text-main); padding: 20px; font-family: 'Share Tech Mono'; font-size: 16px; outline: none; transition: 0.3s;
+}
+.form-cmd:focus { border-color: var(--border-bright); border-bottom-color: var(--volt); background: rgba(204,255,0,0.03); }
+textarea.form-cmd { height: 160px; resize: none; }
+
+.transmit-btn {
+    width: 100%; background: transparent; color: var(--text-main); border: 1px solid var(--border-bright);
+    padding: 25px; font-family: 'Rajdhani'; font-size: 22px; font-weight: 700; letter-spacing: 5px;
+    display: flex; justify-content: center; align-items: center; gap: 15px; transition: 0.3s;
+    position: relative; overflow: hidden;
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+}
+.transmit-btn::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(204,255,0,0.3), transparent); transition: 0.5s;
+}
+.transmit-btn:hover { background: var(--volt); color: #000; border-color: var(--volt); box-shadow: 0 0 25px var(--volt-glow); }
+.transmit-btn:hover::before { left: 100%; }
+
+/* =========================================
+   FOOTER
+   ========================================= */
+footer {
+    text-align: center; padding: 40px; background: #010101; color: var(--text-muted);
+    font-family: 'Share Tech Mono'; font-size: 12px; letter-spacing: 4px; border-top: 1px solid var(--border-dim);
+}
+footer a { color: var(--text-main); text-decoration: none; font-weight: bold; transition: 0.2s; }
+footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+.mob-menu { display: none; flex-direction: column; justify-content: space-between; width: 40px; height: 22px; z-index: 1002; }
+.mob-menu span { display: block; height: 2px; width: 100%; background: var(--text-main); transition: 0.3s; }
+.mob-menu.open span:nth-child(1) { transform: translateY(10px) rotate(45deg); background: var(--volt); }
+.mob-menu.open span:nth-child(2) { opacity: 0; }
+.mob-menu.open span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); background: var(--volt); }
+
+@media (max-width: 1200px) {
+    .intel-container { flex-direction: column; clip-path: none; }
+    .intel-nav { flex: auto; flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border-dim); }
+    .intel-tab { padding: 20px; white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; }
+    .intel-tab::before { display: none; }
+    .intel-tab.active { border-bottom-color: var(--volt); border-left-color: transparent; }
+    .loadout-grid { grid-template-columns: 1fr; gap: 0; clip-path: none; }
+    .comms-ui { flex-direction: column; }
+    .comms-sidebar { border-right: none; border-bottom: 1px solid var(--border-dim); }
 }
 
-nav ul li a:hover::after, nav ul li a.active::after {
-    transform: scaleX(1);
-}
-
-/* --- Mobile Menu & Hamburger (MW Style) --- */
-.tactical-hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 20px;
-    cursor: pointer;
-    z-index: 1002; /* Must sit above the mobile menu */
-}
-
-.tactical-hamburger span {
-    display: block;
-    height: 2px;
-    width: 100%;
-    background-color: var(--mw-text);
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-/* Hamburger Active State */
-.tactical-hamburger.active span:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
-    background-color: var(--mw-accent);
-}
-.tactical-hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-.tactical-hamburger.active span:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
-    background-color: var(--mw-accent);
-}
-
-.menu-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.menu-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-@media only screen and (max-width: 768px) {
-    .tactical-hamburger {
-        display: flex;
-    }
+@media (max-width: 768px) {
+    * { cursor: auto; } /* Disable custom cursor */
+    #reticle-dot, #reticle-cross, .global-hud { display: none; }
+    .hero-title { font-size: 4.5rem; text-shadow: 5px 5px 0 rgba(0,0,0,0.8); }
+    .section-title { font-size: 2.5rem; }
     
+    .mob-menu { display: flex; }
     nav ul {
-        position: fixed;
-        top: 0; right: -300px; /* Hide off-screen */
-        width: 280px; 
-        height: 100vh;
-        background: #0a0a0c;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 100px;
-        border-left: 2px solid var(--mw-accent);
-        box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-        transition: right 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        z-index: 1001;
-    }
-
-    nav ul.menu-open {
-        right: 0;
-    }
-
-    nav ul li {
-        height: auto; 
-        width: 100%;
-    }
-
-    nav ul li a {
-        padding: 20px 30px; 
-        border-left: 4px solid transparent; 
-        border-bottom: 1px solid var(--mw-border);
-    }
-    
-    nav ul li a::after { display: none; }
-    
-    nav ul li a:hover, nav ul li a.active { 
-        border-left-color: var(--mw-accent); 
-        background: rgba(255,255,255,0.05); 
-    }
-}
-
-/* --- Rest of Sections (Hero, Intel, Settings, Contact) remain unchanged below --- */
-#header {
-    width: 100%; height: 100vh; display: flex; align-items: center; padding-top: var(--nav-height);
-}
-.header-text { max-width: 800px; animation: fadeInSlideUp 0.8s ease forwards; }
-.mw-badge { display: inline-block; background: var(--mw-accent); color: #000; font-weight: 700; font-size: 12px; padding: 4px 10px; letter-spacing: 1px; margin-bottom: 20px; }
-.header-text h1 { font-family: 'Teko', sans-serif; font-size: 6rem; line-height: 0.9; text-transform: uppercase; color: var(--mw-text); text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-.header-text h1 span { color: var(--mw-accent); }
-.header-text p { font-size: 18px; color: var(--mw-text-muted); margin-top: 20px; max-width: 600px; line-height: 1.6; }
-
-@keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Intel Section */
-#about { padding: 100px 0; background: var(--mw-bg-base); }
-.settings-layout { display: flex; gap: 50px; background: var(--mw-panel); border: 1px solid var(--mw-border); backdrop-filter: blur(10px); min-height: 500px; }
-.settings-menu { flex: 0 0 300px; border-right: 1px solid var(--mw-border); padding: 20px 0; }
-.tab-links { padding: 18px 30px; font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mw-text-muted); cursor: pointer; position: relative; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
-.tab-links::after { content: '\f105'; font-family: 'Font Awesome 5 Free'; font-weight: 900; opacity: 0; transform: translateX(-10px); transition: all 0.2s ease; }
-.tab-links:hover { background: var(--mw-panel-hover); color: var(--mw-text); }
-.tab-links.active-link { background: rgba(255, 255, 255, 0.08); color: var(--mw-text); border-left: 4px solid var(--mw-accent); }
-.tab-links.active-link::after { opacity: 1; transform: translateX(0); color: var(--mw-accent); }
-.settings-content { flex: 1; padding: 40px; position: relative; }
-.profile-card { display: flex; gap: 30px; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--mw-border); }
-.profile-card img { width: 120px; height: 120px; object-fit: cover; border: 2px solid var(--mw-border-strong); }
-.profile-info h3 { font-family: 'Teko', sans-serif; font-size: 36px; color: var(--mw-accent); line-height: 1; }
-.profile-info p { color: var(--mw-text-muted); font-size: 14px; line-height: 1.6; margin-top: 10px; max-width: 500px; }
-.tab-contents { display: none; animation: fadeIn 0.3s ease; }
-.tab-contents.active-tab { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.settings-list-item { padding: 20px 0; border-bottom: 1px solid var(--mw-border); }
-.settings-list-item:last-child { border-bottom: none; }
-.settings-list-item h4 { font-size: 16px; font-weight: 600; color: var(--mw-text); margin-bottom: 8px; text-transform: uppercase; }
-.settings-list-item p { font-size: 14px; color: var(--mw-text-muted); line-height: 1.5; }
-
-/* Grid Settings */
-#languages { padding: 100px 0; }
-.mw-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; background: var(--mw-panel); padding: 20px 40px; border: 1px solid var(--mw-border); backdrop-filter: blur(10px); }
-.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--mw-border); transition: background 0.2s ease; cursor: pointer; border-left: 3px solid transparent; }
-.setting-row:hover { background: var(--mw-panel-hover); border-left: 3px solid var(--mw-accent); }
-.setting-label { display: flex; align-items: center; gap: 15px; width: 40%; }
-.setting-label img { width: 24px; height: 24px; filter: grayscale(100%) brightness(1.5); transition: 0.3s; }
-.setting-row:hover .setting-label img { filter: grayscale(0%); }
-.setting-label span { font-size: 14px; font-weight: 600; color: var(--mw-text); text-transform: uppercase; letter-spacing: 1px; }
-.setting-control { width: 55%; display: flex; align-items: center; gap: 15px; }
-.mw-slider-container { flex: 1; height: 6px; background: var(--mw-track); position: relative; }
-.mw-slider-fill { height: 100%; background: #fff; width: 0%; transition: width 1s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; }
-.setting-row:hover .mw-slider-fill { background: var(--mw-accent); }
-.mw-slider-fill::after { content: ''; position: absolute; right: -3px; top: -4px; width: 6px; height: 14px; background: #fff; }
-.setting-row:hover .mw-slider-fill::after { background: var(--mw-accent); box-shadow: 0 0 10px var(--mw-accent); }
-.mw-slider-value { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--mw-text-muted); width: 40px; text-align: right; }
-.setting-row:hover .mw-slider-value { color: var(--mw-text); }
-
-/* Contact Section */
-#contact { padding: 100px 0; }
-.contact-wrapper { display: flex; gap: 40px; background: var(--mw-panel); border: 1px solid var(--mw-border); backdrop-filter: blur(10px); }
-.contact-info { flex: 0 0 40%; padding: 50px; border-right: 1px solid var(--mw-border); background: rgba(0, 0, 0, 0.2); }
-.contact-info p { color: var(--mw-text-muted); font-size: 14px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
-.contact-link { display: flex; align-items: center; gap: 15px; color: var(--mw-text); text-decoration: none; font-size: 15px; margin-bottom: 20px; padding: 10px; border: 1px solid transparent; transition: all 0.2s; }
-.contact-link:hover { background: var(--mw-panel-hover); border: 1px solid var(--mw-border-strong); color: var(--mw-accent); }
-.social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 40px; }
-.mw-social-btn { display: flex; align-items: center; justify-content: center; height: 50px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--mw-border); color: var(--mw-text); font-size: 20px; transition: 0.2s; text-decoration: none; }
-.mw-social-btn:hover { background: var(--mw-text); color: #000; border-color: var(--mw-text); transform: scale(1.05); }
-.contact-form-area { flex: 1; padding: 50px; }
-.mw-input-group { margin-bottom: 25px; }
-.mw-input-group label { display: block; font-size: 12px; color: var(--mw-text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.mw-input { width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--mw-border); color: #fff; padding: 15px; font-size: 16px; outline: none; transition: all 0.2s; }
-.mw-input:focus { border-color: var(--mw-text); background: rgba(255, 255, 255, 0.05); }
-textarea.mw-input { height: 120px; resize: none; }
-.mw-btn { background: transparent; color: var(--mw-text); border: 1px solid var(--mw-border-strong); padding: 15px 40px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px; }
-.mw-btn:hover { background: var(--mw-accent); color: #000; border-color: var(--mw-accent); }
-footer { text-align: center; padding: 30px; background: #050505; color: var(--mw-text-muted); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid var(--mw-border); }
-footer a { color: var(--mw-text); text-decoration: none; font-weight: 700; }
-footer a:hover { color: var(--mw-accent); }
-
-@media only screen and (max-width: 1024px) {
-    .mw-settings-grid { grid-template-columns: 1fr; gap: 0; }
-    .settings-layout { flex-direction: column; }
-    .settings-menu { flex: auto; border-right: none; border-bottom: 1px solid var(--mw-border); display: flex; overflow-x: auto; padding: 0; }
-    .tab-links { padding: 15px 20px; white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; }
-    .tab-links::after { display: none; }
-    .tab-links.active-link { border-left: none; border-bottom: 3px solid var(--mw-accent); background: transparent; }
-    .contact-wrapper { flex-direction: column; }
-    .contact-info { border-right: none; border-bottom: 1px solid var(--mw-border); }
-}
-@media only screen and (max-width: 768px) {
-    .header-text h1 { font-size: 4rem; }
-    .glass-nav { padding: 0 20px; }
-}
-</style>
-</head>
-<body>
-
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
-
-    <nav class="glass-nav">
-        <img src="logo.png" class="logo" alt="Logo">
-        
-        <ul id="sidemenu">
-            <li><a href="#header" class="active">Profile</a></li>
-            <li><a href="#about">Barracks</a></li>
-            <li><a href="#languages">Settings</a></li>
-            <li><a href="#contact">Social</a></li>
-            <li><a href="https://underarc-studios.zya.me/" target="_blank">Faction</a></li>
-        </ul>
-
-        <div class="tactical-hamburger" id="hamburgerIcon" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
-
-    <div id="header" class="container">
-        <div class="header-text">
-            <div class="mw-badge">STATUS: ONLINE</div>
-            <h1>Shahwar<br><span>Khan</span></h1>
-            <p>Software Developer & Programmer // Operating out of Chhapara, Seoni. Executing high-fidelity code and deploying modern applications.</p>
-        </div>
-    </div>
-
-    <div id="about">
-        <div class="container">
-            <h2 class="section-title">Operator Intel</h2>
-            <div class="settings-layout">
-                <div class="settings-menu">
-                    <div class="tab-links active-link" onclick="opentab(event, 'overview')">Overview</div>
-                    <div class="tab-links" onclick="opentab(event, 'skills')">Combat Record</div>
-                    <div class="tab-links" onclick="opentab(event, 'lJourney')">Mission Logs</div>
-                    <div class="tab-links" onclick="opentab(event, 'education')">Training Facility</div>
-                </div>
-                <div class="settings-content">
-                    <div class="tab-contents active-tab" id="overview">
-                        <div class="profile-card">
-                            <img src="User.jpg" alt="Shahwar Khan">
-                            <div class="profile-info">
-                                <h3>SHAHWAR "BABA" KHAN</h3>
-                                <p>I am a man in pursuit of knowledge and wisdom, exploring every corner of science and technology to understand the universe and the logic behind creation.</p>
-                            </div>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>Current Assignment</h4>
-                            <p>B.Tech Computer Science // Hyderabad Division</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>Specialization</h4>
-                            <p>Full-Stack Web Development, Android Architecture</p>
-                        </div>
-                    </div>
-                    <div class="tab-contents" id="skills">
-                        <div class="settings-list-item">
-                            <h4>UI/UX Interface Design</h4>
-                            <p>Engineering high-fidelity tactical web and app interfaces for optimal user experience.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>Web Operations</h4>
-                            <p>Full deployment and management of dynamic web applications.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>Mobile Deployment</h4>
-                            <p>Building native Android applications utilizing Java and XML protocols within Android Studio.</p>
-                        </div>
-                    </div>
-                    <div class="tab-contents" id="lJourney">
-                        <div class="settings-list-item">
-                            <h4>2020: System Initialization</h4>
-                            <p>Assembled primary rig. Initiated Python and Java command structures.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>2021: Visual Protocols</h4>
-                            <p>Advanced into web development tactics. Mastered HTML, CSS, and JavaScript infrastructures.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>2022/2023: Mobile Warfare</h4>
-                            <p>Shifted operation to Android Studio. Deployed first functional application to the field.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>2025: Forward Operating Base</h4>
-                            <p>Relocated to Hyderabad. Commenced advanced training in Computer Science for full-stack leadership.</p>
-                        </div>
-                    </div>
-                    <div class="tab-contents" id="education">
-                        <div class="settings-list-item">
-                            <h4>Mission Higher Secondary School</h4>
-                            <p>Completed 12th Standard Protocol in Chhapara. Established foundational vision.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>Tactical Gap Year</h4>
-                            <p>Stationed in Raipur for specialized JEE focus and conditioning.</p>
-                        </div>
-                        <div class="settings-list-item">
-                            <h4>TGEAPCET Clearance</h4>
-                            <p>Successfully passed regional examination. Currently embedded in B.Tech Computer Science program.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="languages">
-        <div class="container">
-            <h2 class="section-title">System Settings</h2>
-            <div class="mw-settings-grid" id="skill-grid">
-                <div class="setting-row">
-                    <div class="setting-label"><img src="html.png" alt="HTML"><span>HTML 5</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="80%"></div></div><div class="mw-slider-value">80</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="css.png" alt="CSS"><span>CSS 3</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="55%"></div></div><div class="mw-slider-value">55</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="js (1).png" alt="JS"><span>JavaScript</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="80%"></div></div><div class="mw-slider-value">80</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="java.png" alt="Java"><span>Java Core</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="75%"></div></div><div class="mw-slider-value">75</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="c++.png" alt="C++"><span>C++</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="50%"></div></div><div class="mw-slider-value">50</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="xml.png" alt="XML"><span>XML</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="55%"></div></div><div class="mw-slider-value">55</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="python.png" alt="Python"><span>Python</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="10%"></div></div><div class="mw-slider-value">10</div></div>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-label"><img src="php.png" alt="PHP"><span>PHP</span></div>
-                    <div class="setting-control"><div class="mw-slider-container"><div class="mw-slider-fill" data-target="15%"></div></div><div class="mw-slider-value">15</div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="contact">
-        <div class="container">
-            <h2 class="section-title">Network & Comms</h2>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <p>Establish secure connection with operator. All channels monitored.</p>
-                    <a href="mailto:official.shahwark@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> official.shahwark@gmail.com</a>
-                    <a href="tel:+919131062919" class="contact-link"><i class="fas fa-phone-alt"></i> +91 91310-62919</a>
-                    <div class="social-grid">
-                        <a href="https://www.instagram.com/md.shahwarkhan/" class="mw-social-btn" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/CodeNameBaba" class="mw-social-btn" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://wa.me/9131062919" class="mw-social-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="tel:+919131062919" class="mw-social-btn"><i class="fas fa-mobile-alt"></i></a>
-                    </div>
-                </div>
-                <div class="contact-form-area">
-                    <form name="submit-to-google-sheet">
-                        <div class="mw-input-group"><label>Callsign / Name</label><input class="mw-input" name="Name" type="text" required></div>
-                        <div class="mw-input-group"><label>Secure Email</label><input class="mw-input" name="email" type="email" required></div>
-                        <div class="mw-input-group"><label>Transmission Payload</label><textarea class="mw-input" name="Message" required></textarea></div>
-                        <button class="mw-btn" type="submit">Send Transmission <i class="fas fa-arrow-right"></i></button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>System UI Version 1.0.4 • <a href="https://underarc-studios.zya.me/" target="_blank">UnderArc Studios</a> Architecture</p>
-    </footer>
-    <script>
-// Mobile Hamburger & Overlay Toggle Logic
-const sidemenu = document.getElementById("sidemenu");
-const hamburger = document.getElementById("hamburgerIcon");
-const overlay = document.getElementById("menuOverlay");
-
-function toggleMobileMenu() {
-    sidemenu.classList.toggle("menu-open");
-    hamburger.classList.toggle("active");
-    overlay.classList.toggle("active");
-}
-
-function closeMobileMenu() {
-    sidemenu.classList.remove("menu-open");
-    hamburger.classList.remove("active");
-    overlay.classList.remove("active");
-}
-      // Tab logic
-const tablinks = document.getElementsByClassName("tab-links");
-const tabcontents = document.getElementsByClassName("tab-contents");
-function opentab(event, tabname) {
-    for (let tablink of tablinks) tablink.classList.remove("active-link");
-    for (let tabcontent of tabcontents) tabcontent.classList.remove("active-tab");
-    event.currentTarget.classList.add("active-link");
-    document.getElementById(tabname).classList.add("active-tab");
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Top Nav Active State & Smooth Scroll (Closes mobile menu upon click)
-    const navItems = document.querySelectorAll('nav ul li a');
-    navItems.forEach(link => {
-        link.addEventListener('click', function(e) {
-            if(this.getAttribute('href').startsWith('#')) {
-                e.preventDefault();
-                navItems.forEach(item => item.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Close menu if open
-                closeMobileMenu();
-              const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
-                    window.scrollTo({ top: offsetTop, behavior: 'smooth' });
-                }
-            }
-        });
-    });
-
-    // Slider Animation
-    const sliders = document.querySelectorAll('.mw-slider-fill');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const targetWidth = entry.target.getAttribute('data-target');
-                setTimeout(() => { entry.target.style.width = targetWidth; }, 200);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    sliders.forEach(slider => observer.observe(slider));
-});
-      // Google Form Submission
-const scriptURL = 'https://script.google.com/macros';
-const form = document.forms['submit-to-google-sheet'];
-
-form.addEventListener('submit', e => {
-    e.preventDefault();
-    const button = form.querySelector('button');
-    const originalText = button.innerHTML;
-    
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transmitting...';
-    button.style.color = '#000';
-    button.style.backgroundColor = 'var(--mw-accent)';
-    button.disabled = true;
-    
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-    .then(response => {
-        alert('Transmission Sent Successfully.');
-        form.reset();
-    })
-    .catch(error => {
-        alert('Error in transmission. Check your connection.');
-    })
-  .finally(() => {
-        button.innerHTML = originalText;
-        button.style.backgroundColor = 'transparent';
-        button.style.color = 'var(--mw-text)';
-        button.disabled = false;
-    });
-});
-</script>
-</body>
-</html>
+        position: fixed; top: 0; right: -100%; width: 100vw; height: 100vh;
+        background: rgba(3,4,5,0.98); backdrop-filter: blur(20px);
+        flex-direction: column; justify-content: 
