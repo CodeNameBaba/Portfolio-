@@ -146,7 +146,7 @@ nav ul li a:hover, nav ul li a.active { color: var(--text-main); background: rgb
 nav ul li a:hover::after, nav ul li a.active::after { transform: scaleX(1); box-shadow: 0 0 10px var(--volt-glow); }
 
 /* =========================================
-   HERO / PARALLAX
+   HERO / PARALLAX & GLITCH
    ========================================= */
 #hero { width: 100%; height: 100vh; display: flex; align-items: center; perspective: 1000px; padding-top: var(--nav-h); }
 .hero-wrapper { transform-style: preserve-3d; transition: transform 0.1s; max-width: 1000px; }
@@ -165,6 +165,20 @@ nav ul li a:hover::after, nav ul li a.active::after { transform: scaleX(1); box-
     text-shadow: 10px 10px 0 rgba(0,0,0,0.8); position: relative;
 }
 .hero-title span { color: transparent; -webkit-text-stroke: 2px var(--volt); }
+
+.glitch-text { position: relative; display: inline-block; }
+.glitch-text::before, .glitch-text::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-base); opacity: 0.8;
+}
+.glitch-text::before { left: 2px; text-shadow: -2px 0 var(--danger); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim 3s infinite linear alternate-reverse; }
+.glitch-text::after { left: -2px; text-shadow: -2px 0 var(--volt); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
+
+@keyframes glitch-anim {
+    0% { clip: rect(39px, 9999px, 71px, 0); } 20% { clip: rect(3px, 9999px, 14px, 0); }
+    40% { clip: rect(54px, 9999px, 98px, 0); } 60% { clip: rect(12px, 9999px, 43px, 0); }
+    80% { clip: rect(89px, 9999px, 9px, 0); } 100% { clip: rect(23px, 9999px, 65px, 0); }
+}
 
 .hero-desc {
     font-size: 1.1rem; color: var(--text-muted); margin-top: 35px; max-width: 650px;
@@ -302,14 +316,28 @@ textarea.form-cmd { height: 160px; resize: none; }
 .transmit-btn:hover::before { left: 100%; }
 
 /* =========================================
-   FOOTER
+   FOOTER (HARDCODED TO EXACTLY MATCH CODE 1)
    ========================================= */
 footer {
-    text-align: center; padding: 40px; background: #010101; color: var(--text-muted);
-    font-family: 'Share Tech Mono'; font-size: 12px; letter-spacing: 4px; border-top: 1px solid var(--border-dim);
+    text-align: center; 
+    padding: 40px; 
+    background: #020304; 
+    color: #7a8292; /* Code 1 muted text color */
+    font-family: 'Share Tech Mono', monospace; 
+    font-size: 12px; 
+    letter-spacing: 3px; 
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Code 1 border dim color */
 }
-footer a { color: var(--text-main); text-decoration: none; font-weight: bold; transition: 0.2s; }
-footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
+footer a { 
+    color: #f4f4f5; /* Code 1 main text color */
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.2s; 
+}
+footer a:hover { 
+    color: #c4ff00; /* Code 1 volt color */
+    text-shadow: 0 0 10px #c4ff00; 
+}
 
 /* =========================================
    MOBILE RESPONSIVENESS
@@ -399,7 +427,7 @@ footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
     <section id="hero" class="container">
         <div class="hero-wrapper" id="hero-tilt">
             <div class="class-tag"><span>CLASS:</span> FULL-STACK OPERATOR</div>
-            <h1 class="hero-title">SHAHWAR<br><span>KHAN</span></h1>
+            <h1 class="hero-title glitch-text" data-text="SHAHWAR">SHAHWAR<br><span>KHAN</span></h1>
             <p class="hero-desc">Software Developer & Programmer // Operating out of Chhapara, Seoni. Executing high-fidelity code, deploying modern applications, and engineering scalable system architectures.</p>
         </div>
     </section>
@@ -475,12 +503,30 @@ footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
                 <p>Establishing encrypted P2P connection... Standing by for transmission payload. All channels actively monitored.</p>
                 <a href="mailto:official.shahwark@gmail.com" class="channel tgt"><i class="fas fa-envelope"></i> OFFICIAL.SHAHWARK@GMAIL.COM</a>
                 <a href="tel:+919131062919" class="channel tgt"><i class="fas fa-satellite-dish"></i> +91 91310-62919</a>
+                
                 <div class="soc-grid">
-                    <a href="https://www.instagram.com/md.shahwarkhan/" class="soc-box tgt" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://github.com/CodeNameBaba" class="soc-box tgt" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://wa.me/9131062919" class="soc-box tgt" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <a href="tel:+919131062919" class="soc-box tgt"><i class="fas fa-phone-alt"></i></a>
-                </div>
+    <a href="https://www.instagram.com/md.shahwarkhan/" class="soc-box tgt" target="_blank">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+    </a>
+    <a href="https://github.com/CodeNameBaba" class="soc-box tgt" target="_blank">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+    </a>
+    <a href="https://wa.me/9131062919" class="soc-box tgt" target="_blank">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.128.552 4.195 1.599 6.01L.034 23.993l6.095-1.597A11.97 11.97 0 0012.03 24c6.625 0 12-5.405 12-12.031S18.656 0 12.031 0zm0 21.988c-1.801 0-3.564-.486-5.115-1.405l-.367-.218-3.804.997 1.018-3.708-.24-.381A9.974 9.974 0 012.012 12.03C2.012 6.51 6.51 2.012 12.03 2.012c5.52 0 10.018 4.498 10.018 10.018 0 5.52-4.498 10.018-10.017 10.018zm5.5-7.53c-.301-.151-1.785-.882-2.062-.983-.277-.101-.48-.151-.682.151-.202.302-.782.983-.958 1.185-.177.202-.354.227-.655.076-1.558-.785-2.73-1.46-3.791-3.26-.177-.302.176-.277.472-.871.1-.201.05-.378-.025-.529-.076-.151-.682-1.643-.935-2.25-.246-.593-.496-.513-.682-.522-.176-.009-.378-.009-.58-.009-.202 0-.53.076-.807.378-.278.303-1.06 1.036-1.06 2.525 0 1.489 1.085 2.928 1.236 3.13.151.202 2.136 3.263 5.176 4.575 2.028.878 2.801.954 3.864.8 1.258-.182 2.732-1.116 3.111-2.195.378-1.079.378-2.003.265-2.195-.113-.191-.416-.292-.718-.443z"/>
+        </svg>
+    </a>
+    <a href="tel:+919131062919" class="soc-box tgt">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+    </a>
+</div>
+
             </div>
             <div class="comms-form">
                 <form name="submit-to-google-sheet">
@@ -494,7 +540,7 @@ footer a:hover { color: var(--volt); text-shadow: 0 0 10px var(--volt); }
     </section>
 
     <footer>
-        <p>SYS_ENGINE_V.4.0.0 // ENGINERED BY <a href="https://underarc-studios.zya.me/" target="_blank" class="tgt">UNDERARC STUDIOS</a></p>
+        <p>IW//SYS_UI_V.3.0.0 // ENGINERED BY <a href="https://underarc-studios.zya.me/" target="_blank" class="tgt">UNDERARC STUDIOS</a></p>
     </footer>
 
 <script>
